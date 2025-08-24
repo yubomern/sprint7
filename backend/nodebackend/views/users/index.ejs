@@ -1,0 +1,41 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+
+<style>
+    
+
+
+/*Imagem de pano de fundo*/
+body {
+    background-image: url('background.jpg');
+
+}
+/*Rodapé HTML*/
+#footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    margin: auto;  
+    text-align: right;
+}
+
+/*Estilizando a tabela de pessoas*/
+#tblList thead{
+    background: gray;
+    color: #FFF;
+    width:100%;
+}
+</style>
+<h1>UserAdmin List</h1>
+<a href="/users/new">+ New User</a>
+<ul>
+  <% users.forEach(user => { %>
+    <li>
+      <%= user.firstName %> <%= user.lastName %> - <%= user.email %>
+      | Company: <%= user.company?.name || "None" %>
+      <form method="POST" action="/users/delete/<%= user._id %>" style="display:inline">
+        <a href="/users/edit/<%= user._id %>">Edit</a>
+        <button type="submit">Delete</button>
+      </form>
+    </li>
+  <% }) %>
+</ul>

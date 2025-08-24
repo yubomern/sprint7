@@ -1,0 +1,200 @@
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /*     height: 100vh; */
+    }
+
+    .quiz-container {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        padding: 20px;
+        width: 100%;
+        max-width: 600px;
+        box-sizing: border-box;
+    }
+
+    h1 {
+        font-size: 28px;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .question {
+        margin-bottom: 20px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+    }
+
+    p {
+        font-size: 16px;
+        margin: 0 0 10px 0;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    input[type="radio"] {
+        margin-right: 10px;
+    }
+
+    button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    .result {
+        margin-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+        .quiz-container {
+            width: 90%;
+        }
+    }
+
+</style>
+<div class="quiz-container">
+    <h1>Math Quiz</h1>
+    <form id="quizForm">
+        <div class="question">
+            <p>1. What is 5 + 3?</p>
+            <label><input type="radio" name="q1" value="6"> 6</label>
+            <label><input type="radio" name="q1" value="7"> 7</label>
+            <label><input type="radio" name="q1" value="8"> 8</label>
+            <label><input type="radio" name="q1" value="9"> 9</label>
+        </div>
+
+        <div class="question">
+            <p>2. What is 10 - 4?</p>
+            <label><input type="radio" name="q2" value="5"> 5</label>
+            <label><input type="radio" name="q2" value="6"> 6</label>
+            <label><input type="radio" name="q2" value="7"> 7</label>
+            <label><input type="radio" name="q2" value="8"> 8</label>
+        </div>
+
+        <div class="question">
+            <p>3. What is 7 x 2?</p>
+            <label><input type="radio" name="q3" value="12"> 12</label>
+            <label><input type="radio" name="q3" value="14"> 14</label>
+            <label><input type="radio" name="q3" value="16"> 16</label>
+            <label><input type="radio" name="q3" value="18"> 18</label>
+        </div>
+
+        <div class="question">
+            <p>4. What is 20 ÷ 4?</p>
+            <label><input type="radio" name="q4" value="4"> 4</label>
+            <label><input type="radio" name="q4" value="5"> 5</label>
+            <label><input type="radio" name="q4" value="6"> 6</label>
+            <label><input type="radio" name="q4" value="7"> 7</label>
+        </div>
+
+        <div class="question">
+            <p>5. What is 9 + 1?</p>
+            <label><input type="radio" name="q5" value="8"> 8</label>
+            <label><input type="radio" name="q5" value="9"> 9</label>
+            <label><input type="radio" name="q5" value="10"> 10</label>
+            <label><input type="radio" name="q5" value="11"> 11</label>
+        </div>
+
+        <div class="question">
+            <p>6. What is 12 - 7?</p>
+            <label><input type="radio" name="q6" value="4"> 4</label>
+            <label><input type="radio" name="q6" value="5"> 5</label>
+            <label><input type="radio" name="q6" value="6"> 6</label>
+            <label><input type="radio" name="q6" value="7"> 7</label>
+        </div>
+
+        <div class="question">
+            <p>7. What is 6 x 3?</p>
+            <label><input type="radio" name="q7" value="15"> 15</label>
+            <label><input type="radio" name="q7" value="16"> 16</label>
+            <label><input type="radio" name="q7" value="18"> 18</label>
+            <label><input type="radio" name="q7" value="20"> 20</label>
+        </div>
+
+        <div class="question">
+            <p>8. What is 15 ÷ 3?</p>
+            <label><input type="radio" name="q8" value="4"> 4</label>
+            <label><input type="radio" name="q8" value="5"> 5</label>
+            <label><input type="radio" name="q8" value="6"> 6</label>
+            <label><input type="radio" name="q8" value="7"> 7</label>
+        </div>
+
+        <div class="question">
+            <p>9. What is 8 + 5?</p>
+            <label><input type="radio" name="q9" value="12"> 12</label>
+            <label><input type="radio" name="q9" value="13"> 13</label>
+            <label><input type="radio" name="q9" value="14"> 14</label>
+            <label><input type="radio" name="q9" value="15"> 15</label>
+        </div>
+
+        <div class="question">
+            <p>10. What is 18 - 9?</p>
+            <label><input type="radio" name="q10" value="8"> 8</label>
+            <label><input type="radio" name="q10" value="9"> 9</label>
+            <label><input type="radio" name="q10" value="10"> 10</label>
+            <label><input type="radio" name="q10" value="11"> 11</label>
+        </div>
+
+        <button type="button" onclick="submitQuiz()">Submit</button>
+    </form>
+    <div id="result" class="result"></div>
+
+
+    <script>
+        const correctAnswers = {
+            q1: '8',
+            q2: '6',
+            q3: '14',
+            q4: '5',
+            q5: '10',
+            q6: '5',
+            q7: '18',
+            q8: '5',
+            q9: '13',
+            q10: '9'
+        };
+
+        function submitQuiz() {
+            const form = document.getElementById('quizForm');
+            const formData = new FormData(form);
+            const resultDiv = document.getElementById('result');
+
+            let resultHtml = '<h2>Quiz Results</h2><ul>';
+
+            formData.forEach((value, key) => {
+                const isCorrect = value === correctAnswers[key];
+                resultHtml += `
+            <li>
+                <strong>Question ${key.slice(1)}:</strong>
+                ${isCorrect ? `<span class="correct">Correct! (${value})</span>` : `<span class="incorrect">Incorrect. Correct answer: ${correctAnswers[key]}</span>`}
+            </li>
+        `;
+            });
+
+            resultHtml += '</ul>';
+            resultDiv.innerHTML = resultHtml;
+        }
+
+    </script>
+</div>

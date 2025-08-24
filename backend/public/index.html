@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <title>Category AJAX CRUD + Calculator + Chat Popup</title>
+
+  <!-- Bootstrap CSS -->
+  <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+  />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <style>
+    body {
+      background-color: #f8fafc; /* Tailwind gray-50 */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 20px;
+    }
+    /* Calculator style */
+    #calculator {
+      max-width: 350px;
+      margin: 20px auto;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgb(0 0 0 / 0.1);
+      padding: 20px;
+    }
+    #calcDisplay {
+      width: 100%;
+      height: 50px;
+      font-size: 1.5rem;
+      text-align: right;
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+    }
+    #calculator button {
+      width: 20%;
+      margin: 5px 2.5%;
+      height: 45px;
+      font-size: 1.2rem;
+      border-radius: 6px;
+    }
+    /* Chat popup */
+    #chatPopup {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: white;
+      box-shadow: 0 0 15px rgb(0 0 0 / 0.2);
+      border-radius: 12px;
+      padding: 15px;
+      width: 320px;
+      max-height: 400px;
+      display: none;
+      flex-direction: column;
+      font-size: 14px;
+      z-index: 9999;
+    }
+    #chatPopup header {
+      font-weight: bold;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+    #chatPopup button.closeChat {
+      background: transparent;
+      border: none;
+      font-size: 1.3rem;
+      cursor: pointer;
+    }
+    #chatPopup .chat-message {
+      background: #e2e8f0; /* Tailwind gray-200 */
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 10px;
+      min-height: 60px;
+      white-space: pre-wrap;
+    }
+    #openChatBtn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #2563eb; /* Tailwind blue-600 */
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      color: white;
+      font-size: 28px;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgb(37 99 235 / 0.7);
+      z-index: 9998;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Links to Services -->
+<div class="mb-4 space-x-4">
+
+
+  <a href="http://localhost:5000/course" class="btn btn-outline-primary btn-sm">course Service</a>
+  <a href="http://localhost:4000/prof" class="btn btn-outline-primary btn-sm">IA prof Service</a>
+  <a href="http://localhost:4000/calc" class="btn btn-outline-primary btn-sm">calc Service</a>
+  <a href="http://localhost:5000/uploadservice" class="btn btn-outline-primary btn-sm">Image Service</a>
+  <a href="http://localhost:5000/users" class="btn btn-outline-secondary btn-sm">Users Service</a>
+  <a href="http://localhost:5000/categories" class="btn btn-outline-success btn-sm">Categories Service</a>
+  <a href="http://localhost:5000" class="btn btn-outline-info btn-sm">Image Service</a>
+  <a href="http://localhost:5000/chat" class="btn btn-outline-warning btn-sm">Chat Service</a>
+</div>
+
+<!-- Categories Section -->
+<div class="max-w-xl mx-auto bg-white p-4 rounded shadow mb-6">
+  <h1 class="text-3xl font-semibold mb-4 text-center text-gray-800">Categories</h1>
+
+  <form id="categoryForm" class="mb-4">
+    <div class="form-group">
+      <input
+              type="text"
+              id="name"
+              placeholder="Category Name"
+              required
+              class="form-control"
+      />
+    </div>
+    <div class="form-group">
+      <input
+              type="text"
+              id="description"
+              placeholder="Description"
+              class="form-control"
+      />
+    </div>
+    <input type="hidden" id="categoryId" />
+    <button type="submit" class="btn btn-primary btn-block">
+      Save
+    </button>
+  </form>
+
+  <ul id="categoryList" class="list-group"></ul>
+</div>
+
+<!-- Scientific Calculator -->
+<div id="calculator" class="mx-auto">
+  <h2 class="text-center font-bold mb-3 text-xl text-gray-700">Scientific Calculator</h2>
+  <input type="text" id="calcDisplay" readonly placeholder="0" />
+
+  <div>
+    <button class="btn btn-secondary" data-val="7">7</button>
+    <button class="btn btn-secondary" data-val="8">8</button>
+    <button class="btn btn-secondary" data-val="9">9</button>
+    <button class="btn btn-warning" data-val="/">÷</button>
+    <button class="btn btn-danger" id="calcClear">C</button>
+  </div>
+  <div>
+    <button class="btn btn-secondary" data-val="4">4</button>
+    <button class="btn btn-secondary" data-val="5">5</button>
+    <button class="btn btn-secondary" data-val="6">6</button>
+    <button class="btn btn-warning" data-val="*">×</button>
+    <button class="btn btn-warning" data-val="(">(</button>
+  </div>
+  <div>
+    <button class="btn btn-secondary" data-val="1">1</button>
+    <button class="btn btn-secondary" data-val="2">2</button>
+    <button class="btn btn-secondary" data-val="3">3</button>
+    <button class="btn btn-warning" data-val="-">−</button>
+    <button class="btn btn-warning" data-val=")">)</button>
+  </div>
+  <div>
+    <button class="btn btn-secondary" data-val="0">0</button>
+    <button class="btn btn-secondary" data-val=".">.</button>
+    <button class="btn btn-success" id="calcEqual">=</button>
+    <button class="btn btn-warning" data-val="+">+</button>
+    <button class="btn btn-info" id="calcSqrt">√</button>
+  </div>
+</div>
+
+<!-- Chat Popup -->
+<div id="chatPopup" class="flex flex-col shadow-lg">
+  <header>
+    Chat <button class="closeChat" title="Close">&times;</button>
+  </header>
+  <div id="chatMessage" class="chat-message">Ask me a question!</div>
+  <button id="nextQuestion" class="btn btn-sm btn-outline-primary">Next Question</button>
+</div>
+
+<button id="openChatBtn" title="Open Chat">💬</button>
+
+<script>
+  // ============ CATEGORY CRUD + LocalStorage ============
+
+  // Load categories from backend + localStorage fallback
+  function fetchCategories() {
+    // Try backend first
+    $.get('/api/categories')
+            .done((data) => {
+              // Save to localStorage for offline use
+              localStorage.setItem('categories', JSON.stringify(data));
+              renderCategories(data);
+            })
+            .fail(() => {
+              // Load from localStorage fallback
+              const localData = localStorage.getItem('categories');
+              if(localData) {
+                renderCategories(JSON.parse(localData));
+              } else {
+                $('#categoryList').html('<li class="list-group-item text-center text-muted">No categories found.</li>');
+              }
+            });
+  }
+
+  // Render categories list
+  function renderCategories(categories) {
+    $('#categoryList').empty();
+    if (!categories.length) {
+      $('#categoryList').html('<li class="list-group-item text-center text-muted">No categories found.</li>');
+      return;
+    }
+    categories.forEach(cat => {
+      $('#categoryList').append(`
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <b>${cat.name}</b> - ${cat.description || '<em>No description</em>'}
+            </div>
+            <div>
+              <button class="btn btn-sm btn-warning mr-2" onclick="editCategory('${cat._id}', '${cat.name}', '${cat.description || ''}')">Edit</button>
+              <button class="btn btn-sm btn-danger" onclick="deleteCategory('${cat._id}')">Delete</button>
+            </div>
+          </li>
+        `);
+    });
+  }
+
+  // Create or Update category on server and update localStorage
+  $('#categoryForm').submit(function (e) {
+    e.preventDefault();
+    const name = $('#name').val().trim();
+    const description = $('#description').val().trim();
+    const id = $('#categoryId').val();
+
+    if (!name) return alert('Category name is required');
+
+    if (id) {
+      $.ajax({
+        url: `/api/categories/${id}`,
+        method: 'PUT',
+        data: { name, description },
+        success: (data) => {
+          fetchCategories();
+          resetForm();
+        },
+        error: () => alert('Failed to update category'),
+      });
+    } else {
+      $.post('/api/categories', { name, description })
+              .done(() => {
+                fetchCategories();
+                resetForm();
+              })
+              .fail(() => alert('Failed to add category'));
+    }
+  });
+
+  // Edit category form populate
+  function editCategory(id, name, description) {
+    $('#name').val(name);
+    $('#description').val(description);
+    $('#categoryId').val(id);
+  }
+
+  // Delete category
+  function deleteCategory(id) {
+    if (confirm('Delete this category?')) {
+      $.ajax({
+        url: `/api/categories/${id}`,
+        method: 'DELETE',
+        success: () => fetchCategories(),
+        error: () => alert('Failed to delete category'),
+      });
+    }
+  }
+
+  // Reset form
+  function resetForm() {
+    $('#name').val('');
+    $('#description').val('');
+    $('#categoryId').val('');
+  }
+
+  fetchCategories();
+
+  // ============ SCIENTIFIC CALCULATOR LOGIC ============
+  const calcDisplay = document.getElementById('calcDisplay');
+
+  function appendToDisplay(val) {
+    if(calcDisplay.value === '0' && val !== '.') {
+      calcDisplay.value = val;
+    } else {
+      calcDisplay.value += val;
+    }
+  }
+
+  // Calculator button click
+  $('#calculator button[data-val]').click(function() {
+    appendToDisplay($(this).attr('data-val'));
+  });
+
+  // Clear button
+  $('#calcClear').click(() => {
+    calcDisplay.value = '';
+  });
+
+  // Sqrt button
+  $('#calcSqrt').click(() => {
+    try {
+      const val = parseFloat(calcDisplay.value);
+      if (val < 0) throw 'Invalid input';
+      calcDisplay.value = Math.sqrt(val).toString();
+    } catch {
+      alert('Invalid input for square root');
+    }
+  });
+
+  // Equal button - safely evaluate math expression
+  $('#calcEqual').click(() => {
+    try {
+      // Use Function constructor instead of eval for safety
+      const expr = calcDisplay.value;
+      // Basic validation: only numbers and math operators allowed
+      if(!/^[0-9+\-*/().\s]+$/.test(expr)) {
+        alert('Invalid characters detected');
+        return;
+      }
+      // eslint-disable-next-line no-new-func
+      const result = new Function('return ' + expr)();
+      calcDisplay.value = result;
+    } catch {
+      alert('Invalid expression');
+    }
+  });
+
+  // ============ CHAT POPUP WITH RANDOM QUESTIONS ============
+  const chatBtn = document.getElementById('openChatBtn');
+  const chatPopup = document.getElementById('chatPopup');
+  const chatMessage = document.getElementById('chatMessage');
+  const nextQuestionBtn = document.getElementById('nextQuestion');
+  const closeChatBtn = chatPopup.querySelector('.closeChat');
+
+  const questions = [
+    "What is your favorite programming language?",
+    "Do you like working with React or Vue?",
+    "What's the last book you read?",
+    "Have you tried Tailwind CSS?",
+    "What's your favorite JavaScript framework?",
+    "How do you handle state management?",
+    "What's your favorite debugging technique?",
+    "Do you prefer dark mode or light mode?",
+    "Have you ever built a chat app before?",
+    "What's your go-to coffee order while coding?"
+  ];
+
+  function getRandomQuestion() {
+    return questions[Math.floor(Math.random() * questions.length)];
+  }
+
+  function openChat() {
+    chatPopup.style.display = 'flex';
+    chatMessage.textContent = getRandomQuestion();
+    chatBtn.style.display = 'none';
+  }
+
+  function closeChat() {
+    chatPopup.style.display = 'none';
+    chatBtn.style.display = 'block';
+  }
+
+  nextQuestionBtn.addEventListener('click', () => {
+    chatMessage.textContent = getRandomQuestion();
+  });
+
+  closeChatBtn.addEventListener('click', closeChat);
+  chatBtn.addEventListener('click', openChat);
+
+</script>
+<script src="app.js"></script>
+</body>
+</html>

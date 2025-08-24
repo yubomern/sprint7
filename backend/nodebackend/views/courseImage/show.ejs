@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%=product.name %>
+    </title>
+    <%-include('./link')-%>
+
+</head>
+
+<body>
+<%-include('../layout/Header')%>
+<div class="col-lg-8 mx-auto my-4 shadow p-5">
+    <div class="row">
+        <div class="col-lg-4">
+            <% if (product.singleImage) { %>
+                <img src="/<%= product.singleImage %>" alt="Single Image" class="w-100 img-thumbnail">
+            <% } %>
+        </div>
+        <div class="col-lg-8">
+            <h1 class="text-info">
+                <%= product.name %>
+            </h1>
+            <p>
+                <%= product.description %>
+            </p>
+
+            <div class="mt-3">
+
+                <a class="btn btn-warning" href="/products/<%= product._id %>/edit">Update</a>
+                <a class="btn btn-info" href="/products">Back</a>
+            </div>
+        </div>
+        <div class="row">
+            <% product.images.forEach(image=> { %>
+                <div class="col-lg-3 col-md-6 mt-3">
+
+                    <img src="/<%= image %>" alt="Product Image" width="100%" height="100px" class="img-thumbnail">
+                </div>
+            <% }) %>
+        </div>
+    </div>
+
+
+
+
+</div>
+</body>
+
+</html>

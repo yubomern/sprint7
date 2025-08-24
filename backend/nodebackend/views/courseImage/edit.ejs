@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product</title>
+    <%-include('./link')-%>
+
+</head>
+
+<body>
+<%-include('../layout/Header')%>
+<div class="col-lg-6 mx-auto my-5 p-5 shadow">
+    <h1 class="text-info text-center">Edit Product</h1>
+    <form action="/products/<%= product._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+        <div class="mt-4">
+            <label for="name">Product Name:</label>
+            <input type="text" class="form-control" name="name" id="name" value="<%= product.name %>" required>
+        </div>
+        <div class="mt-4">
+            <label for="description">Description:</label>
+            <textarea class="form-control" name="description" id="description"
+                      required><%= product.description %></textarea>
+        </div>
+        <div class="mt-4">
+            <label for="singleImage">Upload Single Image:</label>
+            <input type="file" class="form-control" name="singleImage" id="singleImage">
+            <% if (product.singleImage) { %>
+            <a href="/<%= product.singleImage %>" target="_blank"><img src="/<%= product.singleImage %>" alt="Single Image"  width="100px" height="100px" class="mt-4 img-thumbnail">
+                <% } %></a>
+        </div>
+        <div class="mt-4">
+            <label for="images">Upload Multiple Images:</label>
+            <input type="file" class="form-control" name="images" id="images" multiple>
+            <% product.images.forEach(image=> { %>
+                <a href="/<%= image %>" target="_blank">
+                    <img src="/<%= image %>" alt="Product Image" width="100px" height="100px" class="mt-4 img-thumbnail">
+                </a>
+            <% }) %>
+            </a>
+        </div>
+        <div class="mt-4">
+            <button class="btn btn-warning" type="submit">Update Product</button>
+            <a class="btn btn-danger" href="/products/<%= product._id %>">Cancel</a>
+
+        </div>
+    </form>
+</div>
+</body>
+
+</html>

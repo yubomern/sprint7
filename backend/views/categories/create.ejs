@@ -1,0 +1,10 @@
+<%- include('../layout') -%>
+
+<h2>Create Category</h2>
+<form action="/categories" method="POST">
+  <input name="name" placeholder="Name" required>
+  <br>
+  <textarea name="description" placeholder="Description"></textarea>
+  <br>
+  <button>Create</button>
+</form>

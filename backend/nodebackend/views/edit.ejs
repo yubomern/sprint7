@@ -1,0 +1,14 @@
+<h1>Edit User</h1>
+<form method="POST" action="/users/update/<%= user._id %>">
+  <input name="username" value="<%= user.username %>" required />
+  <input name="firstName" value="<%= user.firstName %>" required />
+  <input name="lastName" value="<%= user.lastName %>" required />
+  <input name="email" value="<%= user.email %>" required />
+  <input name="password" value="<%= user.password %>" required />
+  <select name="company">
+    <% companies.forEach(c => { %>
+      <option value="<%= c._id %>" <%= user.company?.toString() === c._id.toString() ? "selected" : "" %>><%= c.name %></option>
+    <% }) %>
+  </select>
+  <button type="submit">Update</button>
+</form>

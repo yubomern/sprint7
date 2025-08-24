@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/studyNotionLogo.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Study Notion</title>
+
+
+  <!-- <link rel="preconnect" href="https://fonts.googleapis.com"> -->
+  <!-- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> -->
+  <link href="https://fonts.googleapis.com/css2?family=Boogaloo&display=swap" rel="stylesheet">
+
+
+</head>
+
+<body>
+<div id="root">
+  <div hidden>
+    <pre id="resultIP"></pre>
+    <pre id="resultByIP"></pre>
+
+  </div>
+</div>
+  
+  <script type="module" src="/src/main.jsx"></script>
+
+  <!-- Error while using react-super-responsive-table -->
+  <script>const global = globalThis;</script>
+  <!-- <script>window.global = window;</script> -->
+
+
+
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+  function logout() {
+    localStorage.removeItem("token"); // remove stored JWT
+    alert("Session expired, please login again.");
+    window.location.href = "/login"; // redirect to login
+  }
+
+  function apiRequest(url, method = "GET", data = null) {
+    return $.ajax({
+      url: url,
+      type: method,
+      data: data ? JSON.stringify(data) : null,
+      contentType: "application/json",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+      success: function (res) {
+        console.log("✅ Success:", res);
+      },
+      error: function (xhr) {
+        if (xhr.status === 401) {
+          logout(); // auto logout if token expired
+        } else {
+          console.error("❌ Error:", xhr.responseText);
+        }
+      },
+    });
+  }
+
+  // Example call
+  $(document).ready(function () {
+    apiRequest("/api/protected");
+  });
+
+
+  function isTokenExpired(token) {
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return payload.exp * 1000 < Date.now();
+  } catch {
+    return true; // invalid token
+  }
+}
+
+function checkAndRequest(url) {
+  const token = localStorage.getItem("token");
+  if (!token || isTokenExpired(token)) {
+    logout();
+  } else {
+    apiRequest(url);
+  }
+}
+
+
+
+
+
+
+
+
+   var access_key = '75a3618446594070f8299881b71964ea';
+
+$.getJSON("https://api.ipstack.com/check?access_key="+access_key, function(data) {
+            //$("#ip-address").html(data.ip);
+    console.log(data);
+$("#resultIP").text(data);
+// set endpoint and your access key
+var ip = data.ip;
+
+
+// get the API result via jQuery.ajax
+$.ajax({
+    url: 'https://api.ipstack.com/' + ip + '?access_key=' + access_key,
+    dataType: 'jsonp',
+    success: function(json) {
+
+        // output the "capital" object inside "location"
+        console.log(json);
+        console.table(json);
+        localStorage.setItem('ip' , json.ip);
+        sessionStorage.setItem('country_number' ,  json .country_name);
+      $("#resultByIP").text(json);
+
+    }
+});
+
+    
+      })
+
+</script>
+
+
+
+
+   <script>
+
+const token = localStorage.getItem("token");
+console.log(token);
+// Example: check token validity from frontend
+async function checkToken() {
+    const token = localStorage.getItem("token"); // or from cookie
+
+    try {
+        const res = await fetch("http://localhost:4000/check-token", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        });
+        const data = await res.json();
+        console.log("Token check result:", data);
+        if (res.status === 200) {
+            console.log("✅ Token valid: " + data.user.email);
+        } else {
+            console.log("❌ " + data.message);
+            localStorage.removeItem("token") ;
+            window.location.href ="/login";
+
+           // alert ("you  should login");
+        }
+    } catch (err) {
+        console.error("Error checking token:", err);
+    }
+   }
+   //checkToken();
+   </script>
+
+
+  
+
+</body>
+
+</html>

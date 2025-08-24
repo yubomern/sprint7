@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Socket.IO Chat with Notifications</title>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+<body>
+<h2>Chat</h2>
+<div id="messages"></div>
+<input id="messageInput" placeholder="Type message" />
+<button id="sendBtn">Send</button>
+
+<script>
+  const socket = io('http://localhost:8080');
+
+  const messagesDiv = document.getElementById('messages');
+  const messageInput = document.getElementById('messageInput');
+  const sendBtn = document.getElementById('sendBtn');
+
+  // Request notification permission at start
+  if ("Notification" in window && Notification.permission !== "granted") {
+    Notification.requestPermission().then(permission => {
+      console.log("Notification permission:", permission);
+    });
+  }
+
+  // Listen for new messages
+  socket.on('message', (msg) => {
+    const div = document.createElement('div');
+    div.textContent = msg;
+    messagesDiv.appendChild(div);
+
+    // Show browser notification if permission granted and page not focused
+    if (Notification.permission === "granted" && document.hidden) {
+      new Notification('New Message', { body: msg });
+    }
+  });
+
+  sendBtn.onclick = () => {
+    const text = messageInput.value.trim();
+    if (text) {
+      socket.emit('send-message', text);
+      messageInput.value = '';
+    }
+  };
+</script>
+</body>
+</html>

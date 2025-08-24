@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+        <html lang="en">
+        <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>SocialConnect - MERN Social App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4267B2;
+            --secondary-color: #e9ebee;
+            --accent-color: #1877f2;
+            --text-color: #333;
+            --light-text: #65676b;
+            --card-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background-color: #f0f2f5;
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar {
+            background-color: var(--primary-color);
+        }
+
+        .navbar-brand {
+            color: white !important;
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            display: grid;
+            grid-template-columns: 1fr 3fr 1.5fr;
+            gap: 20px;
+        }
+
+        .sidebar {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: var(--card-shadow);
+            height: fit-content;
+        }
+
+        .feed {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .right-sidebar {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: var(--card-shadow);
+            height: fit-content;
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .user-card:hover {
+            background: var(--secondary-color);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+
+        .notification-item, .message-item {
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            background: var(--secondary-color);
+            cursor: pointer;
+        }
+
+        .notification-item.unread, .message-item.unread {
+            background: #e7f3ff;
+            font-weight: 500;
+        }
+
+        .post-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .chat-container {
+            position: fixed;
+            bottom: 0;
+            right: 20px;
+            width: 300px;
+            background: white;
+            border-radius: 10px 10px 0 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .chat-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 10px 10px 0 0;
+            cursor: pointer;
+        }
+
+        .chat-messages {
+            height: 200px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+        }
+
+        .online-indicator {
+            width: 10px;
+            height: 10px;
+            background: #31a24c;
+            border-radius: 50%;
+            display: inline-block;
+            margin-left: 5px;
+        }
+
+        .tab-content {
+            padding: 15px 0;
+        }
+
+        .nav-tabs .nav-link.active {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .search-bar {
+            background: #f0f2f5;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 15px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #365899;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #f02849;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">
+            <i class="fas fa-users me-2"></i>SocialConnect
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Friends</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Messages</a>
+                </li>
+            </ul>
+            <form class="d-flex me-2">
+                <input class="form-control search-bar" type="search" placeholder="Search SocialConnect">
+            </form>
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link position-relative" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-bell fa-lg"></i>
+                        <span class="notification-badge">3</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
+                        <li><h6 class="dropdown-header">Notifications</h6></li>
+                        <li><a class="dropdown-item" href="#">Alex Johnson liked your post</a></li>
+                        <li><a class="dropdown-item" href="#">Sarah Miller sent you a friend request</a></li>
+                        <li><a class="dropdown-item" href="#">Mike Williams commented on your photo</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" class="user-avatar" alt="User"> John Doe
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li><a class="dropdown-item" href="#">Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container main-container">
+    <!-- Left Sidebar -->
+    <div class="sidebar">
+        <div class="user-card">
+            <img src="https://randomuser.me/api/portraits/men/32.jpg" class="user-avatar" alt="User">
+            <div>
+                <h6>John Doe</h6>
+                <small class="text-muted">See your profile</small>
+            </div>
+        </div>
+        <hr>
+        <h6>Shortcuts</h6>
+        <div class="user-card">
+            <img src="https://randomuser.me/api/portraits/women/44.jpg" class="user-avatar" alt="User">
+            <div>
+                <h6>Sarah's Group</h6>
+                <small class="text-muted">Group · 120 members</small>
+            </div>
+        </div>
+        <div class="user-card">
+            <img src="https://randomuser.me/api/portraits/men/22.jpg" class="user-avatar" alt="User">
+            <div>
+                <h6>Tech Enthusiasts</h6>
+                <small class="text-muted">Group · 5.2k members</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Feed -->
+    <div class="feed">
+        <!-- Create Post -->
+        <div class="post-card">
+            <div class="d-flex mb-3">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" class="user-avatar" alt="User">
+                <input type="text" class="form-control ms-2" placeholder="What's on your mind, John?">
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between">
+                <button class="btn btn-light"><i class="fas fa-video text-danger me-2"></i>Live Video</button>
+                <button class="btn btn-light"><i class="fas fa-photo-video text-success me-2"></i>Photo/Video</button>
+                <button class="btn btn-light"><i class="fas fa-laugh-beam text-warning me-2"></i>Feeling/Activity</button>
+            </div>
+        </div>
+
+        <!-- Posts -->
+        <div class="post-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex align-items-center">
+                    <img src="https://randomuser.me/api/portraits/women/65.jpg" class="user-avatar" alt="User">
+                    <div>
+                        <h6 class="mb-0">Emma Watson</h6>
+                        <small class="text-muted">2 hours ago · <i class="fas fa-globe-americas"></i></small>
+                    </div>
+                </div>
+                <i class="fas fa-ellipsis-h text-muted"></i>
+            </div>
+            <p>Just finished my morning hike! The view was absolutely breathtaking. 🏞️ #NatureLover #WeekendVibes</p>
+            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1350&q=80" class="img-fluid rounded mb-3" alt="Mountain view">
+            <div class="d-flex justify-content-between">
+                <button class="btn btn-sm btn-light"><i class="fas fa-thumbs-up me-1"></i> Like</button>
+                <button class="btn btn-sm btn-light"><i class="fas fa-comment me-1"></i> Comment</button>
+                <button class="btn btn-sm btn-light"><i class="fas fa-share me-1"></i> Share</button>
+            </div>
+        </div>
+
+        <div class="post-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex align-items-center">
+                    <img src="https://randomuser.me/api/portraits/men/22.jpg" class="user-avatar" alt="User">
+                    <div>
+                        <h6 class="mb-0">Mike Williams</h6>
+                        <small class="text-muted">5 hours ago · <i class="fas fa-globe-americas"></i></small>
+                    </div>
+                </div>
+                <i class="fas fa-ellipsis-h text-muted"></i>
+            </div>
+            <p>Check out this new React component library I've been working on! It's open source and would love some contributors.</p>
+            <div class="bg-light p-3 rounded mb-3">
+                <h6>React Components Library</h6>
+                <small class="text-muted">github.com/mike/react-components</small>
+            </div>
+            <div class="d-flex justify-content-between">
+                <button class="btn btn-sm btn-light"><i class="fas fa-thumbs-up me-1"></i> Like</button>
+                <button class="btn btn-sm btn-light"><i class="fas fa-comment me-1"></i> Comment</button>
+                <button class="btn btn-sm btn-light"><i class="fas fa-share me-1"></i> Share</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Sidebar -->
+    <div class="right-sidebar">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="friends-tab" data-bs-toggle="tab" data-bs-target="#friends">Friends</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="notifications-tab" data-bs-toggle="tab" data-bs-target="#notifications">Notifications</button>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="friends">
+                <h6>Friend Requests</h6>
+                <div class="user-card">
+                    <img src="https://randomuser.me/api/portraits/women/12.jpg" class="user-avatar" alt="User">
+                    <div class="flex-grow-1">
+                        <h6 class="mb-0">Lisa Johnson</h6>
+                        <small class="text-muted">8 mutual friends</small>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary btn-sm"><i class="fas fa-check"></i></button>
+                        <button class="btn btn-light btn-sm"><i class="fas fa-times"></i></button>
+                    </div>
+                </div>
+                <div class="user-card">
+                    <img src="https://randomuser.me/api/portraits/men/45.jpg" class="user-avatar" alt="User">
+                    <div class="flex-grow-1">
+                        <h6 class="mb-0">David Miller</h6>
+                        <small class="text-muted">2 mutual friends</small>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary btn-sm"><i class="fas fa-check"></i></button>
+                        <button class="btn btn-light btn-sm"><i class="fas fa-times"></i></button>
+                    </div>
+                </div>
+                <hr>
+                <h6>Contacts</h6>
+                <div class="user-card">
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" class="user-avatar" alt="User">
+                    <div class="flex-grow-1">
+                        <h6 class="mb-0">Sarah Connor <span class="online-indicator"></span></h6>
+                        <small class="text-muted">Online</small>
+                    </div>
+                </div>
+                <div class="user-card">
+                    <img src="https://randomuser.me/api/portraits/men/22.jpg" class="user-avatar" alt="User">
+                    <div class="flex-grow-1">
+                        <h6 class="mb-0">Mike Williams <span class="online-indicator"></span></h6>
+                        <small class="text-muted">Online</small>
+                    </div>
+                </div>
+                <div class="user-card">
+                    <img src="https://randomuser.me/api/portraits/women/65.jpg" class="user-avatar" alt="User">
+                    <div class="flex-grow-1">
+                        <h6 class="mb-0">Emma Watson</h6>
+                        <small class="text-muted">Last seen 2h ago</small>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="notifications">
+                <div class="notification-item unread">
+                    <div class="d-flex">
+                        <img src="https://randomuser.me/api/portraits/men/22.jpg" class="user-avatar me-3" alt="User">
+                        <div>
+                            <h6 class="mb-0">Mike Williams</h6>
+                            <p class="mb-0">Liked your post · 30m ago</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="notification-item unread">
+                    <div class="d-flex">
+                        <img src="https://randomuser.me/api/portraits/women/12.jpg" class="user-avatar me-3" alt="User">
+                        <div>
+                            <h6 class="mb-0">Lisa Johnson</h6>
+                            <p class="mb-0">Sent you a friend request · 1h ago</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="notification-item">
+                    <div class="d-flex">
+                        <img src="https://randomuser.me/api/portraits/women/65.jpg" class="user-avatar me-3" alt="User">
+                        <div>
+                            <h6 class="mb-0">Emma Watson</h6>
+                            <p class="mb-0">Commented on your photo · 3h ago</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chat Container -->
+<div class="chat-container">
+    <div class="chat-header d-flex justify-content-between">
+        <span>Chats</span>
+        <span>
+                <i class="fas fa-minus me-2"></i>
+                <i class="fas fa-times"></i>
+            </span>
+    </div>
+    <div class="chat-messages">
+        <div class="message-item unread">
+            <div class="d-flex">
+                <img src="https://randomuser.me/api/portraits/women/44.jpg" class="user-avatar me-3" alt="User">
+                <div>
+                    <h6 class="mb-0">Sarah Connor <span class="online-indicator"></span></h6>
+                    <p class="mb-0">Hey, are we still meeting tomorrow?</p>
+                </div>
+            </div>
+        </div>
+        <div class="message-item">
+            <div class="d-flex">
+                <img src="https://randomuser.me/api/portraits/men/22.jpg" class="user-avatar me-3" alt="User">
+                <div>
+                    <h6 class="mb-0">Mike Williams</h6>
+                    <p class="mb-0">Check out this new library I found!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="chat-input">
+        <input type="text" class="form-control me-2" placeholder="Type a message...">
+        <button class="btn btn-primary"><i class="fas fa-paper-plane"></i></button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Simple JavaScript for interactivity
+    document.addEventListener('DOMContentLoaded', function() {
+        // Tab functionality
+        const triggerTabList = document.querySelectorAll('#myTab button')
+        triggerTabList.forEach(triggerEl => {
+            new bootstrap.Tab(triggerEl)
+        })
+
+        // Notification badge
+        const notificationBell = document.querySelector('.fa-bell');
+        notificationBell.addEventListener('click', function() {
+            const badge = document.querySelector('.notification-badge');
+            badge.style.display = 'none';
+        });
+
+        // Chat minimize/close
+        const chatMinimize = document.querySelector('.fa-minus');
+        const chatClose = document.querySelector('.fa-times');
+        const chatMessages = document.querySelector('.chat-messages');
+        const chatInput = document.querySelector('.chat-input');
+
+        chatMinimize.addEventListener('click', function() {
+            chatMessages.style.display = chatMessages.style.display === 'none' ? 'block' : 'none';
+            chatInput.style.display = chatInput.style.display === 'none' ? 'flex' : 'none';
+        });
+
+        chatClose.addEventListener('click', function() {
+            document.querySelector('.chat-container').style.display = 'none';
+        });
+    });
+</script>
+</body>
+</html></title>
+</head>
+<body>
+
+</body>
+</html>

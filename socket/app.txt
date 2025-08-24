@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <style>
+        #update {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="col-6 mx-auto p-5 my-5 shadow createData">
+        <form action="" method="post" id="saveData">
+            <div class="mt-4">
+                <input type="text" class="form-control" name="username" placeholder="enter username">
+            </div>
+            <div class="mt-4">
+                <input type="text" class="form-control" name="email" placeholder="enter email">
+            </div>
+            <div class="mt-4">
+                <input type="text" class="form-control" name="mobile" placeholder="enter mobile">
+            </div>
+            <div class="mt-4">
+                <button class="btn btn-success" id="save">Submit</button>
+                <button class="btn btn-warning" type="button" id="update">Update</button>
+            </div>
+        </form>
+    </div>
+    <div class="container my-5">
+        <table class="table table-hover table-striped table-success">
+            <thead class="table-dark">
+                <td>S.No.</td>
+                <td>username</td>
+                <td>email</td>
+                <td>mobile</td>
+                <td>Action</td>
+            </thead>
+            <tbody id="tableData"></tbody>
+        </table>
+    </div>
+    <script src="assets/js/submit.js"></script>
+
+    <script>
+document.querySelector('#saveData')
+    .addEventListener('submit', (e) => {
+        alert("submit")
+        e.preventDefault()// dafault property stop
+        console.log(e)
+
+        /// output show with array format
+        const allInput = document.querySelectorAll('.createData input')
+
+        /// all elements
+        console.log(allInput[0])
+        console.log(allInput[1])
+        console.log(allInput[2])
+
+        /// values of all inputs
+        console.log(allInput[0].value)
+        console.log(allInput[1].value)
+        console.log(allInput[2].value)
+
+        const username = allInput[0].value
+        const email = allInput[1].value
+        const mobile = allInput[2].value
+
+        // localStorage.setItem('username', username)
+        // localStorage.setItem('email', email)
+        // localStorage.setItem('mobile', mobile)
+
+        // const student = {
+        //     username:username,
+        //     email:email,
+        //     mobile:mobile,
+        // }
+
+
+        // const arr = JSON.parse(localStorage.getItem('userList')) || [];
+
+
+        const existData = JSON.parse(localStorage.getItem('userList'))
+        const arr = existData == null ? [] : existData;
+
+        const student = {
+            username, email, mobile
+        }
+        console.log(arr)
+        arr.push(student)
+        console.log(student)
+        localStorage.setItem('userList', JSON.stringify(arr))
+        // window.location.href = window.location.href 
+        window.location.reload()
+        show()
+    })
+
+function show() {
+    const userList = JSON.parse(localStorage.getItem('userList'))
+    let result = "";
+    userList?.forEach((ele, index) => {
+        result += `
+        <tr>
+        <td>${index + 1}</td>
+        <td>${ele.username}</td>
+        <td>${ele.email}</td>
+        <td>${ele.mobile}</td>
+        <td>
+        <button class="btn btn-danger" onclick="trash(${index})">delete</button>
+          <button class="btn btn-warning" onclick="edit(${index})">edit</button>
+        </td>
+        </tr>
+            `
+    })
+    document.querySelector('#tableData').innerHTML = result;
+}
+show()
+
+function trash(userId) {
+    if (confirm("do you want to delete this item?")) {
+        const user = JSON.parse(localStorage.getItem('userList'))
+        user.splice(userId, 1)
+        localStorage.setItem('userList', JSON.stringify(user))
+        show()
+    }
+}
+
+function edit(userId) {
+
+    document.querySelector('#save').style.display = "none";
+    document.querySelector('#update').style.display = "block";
+    var user = JSON.parse(localStorage.getItem('userList'))
+    console.log(user[userId])
+
+    /// single user data in object format
+    const singleUser = user[userId]
+
+    //// all input element
+    const allInput = document.querySelectorAll('.createData input')
+
+    allInput[0].value = singleUser.username
+    allInput[1].value = singleUser.email
+    allInput[2].value = singleUser.mobile
+
+
+    document.querySelector('#update')
+        .addEventListener('click', () => {
+            const allInput = document.querySelectorAll('.createData input')
+            const username = allInput[0].value;
+            const email = allInput[1].value;
+            const mobile = allInput[2].value;
+
+            const newUser = {
+                username,email,mobile
+            }
+            user.splice(userId,1,newUser)
+            console.log(user)
+
+            localStorage.setItem('userList',JSON.stringify(user))
+            window.location.reload()
+            show()
+        })
+}
+
+
+
+</script>
+
+
+<section id="box">
+  <h1>Local Storage</h1>
+  <form action="">
+    <p>Key: <br /><input type="text" id="key" /></p>
+    <p>Value: <br /><input type="text" id="value"></p>
+    <p><input type="submit" id="button" value="submit"/></p>
+    <div id="display"></div>
+  </form>
+  <script>
+
+
+function doFirst() {
+  var button = document.getElementById("button");
+  button.addEventListener("click", save, false);
+  display();
+}
+
+function save(){
+  var key = document.getElementById("key").value;
+  var value = document.getElementById("value").value;
+  // set the item
+  sessionStorage.setItem(key, value);
+  display();
+  key.value = "";
+  value.value = "";
+}
+function display(){
+  var display = document.getElementById("display");
+  display.innerHTML = "";
+  for(var i = 0; sessionStorage.length >i; i++) {
+    var a = sessionStorage.key(i);
+    // retrieve the item
+    var b = sessionStorage.getItem(a);
+    display.innerHTML += a+" - " +b+"<br/>";
+  }
+}
+function clear(){
+  sessionStorage.clear();
+  location.reload();
+}
+window.addEventListener("load", doFirst, false);
+
+
+import React from 'https://esm.sh/react@18.2.0'
+import ReactDOM from 'https://esm.sh/react-dom@18.2.0'
+import ReactQuill from "https://cdn.skypack.dev/react-quill@2.0.0";
+
+const TextEditor = ()=>{
+  const [value, setValue] = React.useState('');
+
+const customToolbarOptions = [
+  ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+  ['blockquote', 'code-block'],
+
+  [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+  [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+  [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+  [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+  [{ 'direction': 'rtl' }],                         // text direction
+
+  [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+  [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+  [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+  [{ 'font': [] }],
+  [{ 'align': [] }],
+
+  ['clean']                                         // remove formatting button
+];
+  
+  return <ReactQuill theme="snow" className="text-editor" value={value} onChange={setValue} modules={{toolbar: customToolbarOptions}}/>
+}
+
+const App = () => {
+  return <div className="app">
+      <TextEditor />
+    </div>
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+</script>
+</body>
+
+</html>

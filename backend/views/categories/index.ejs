@@ -1,0 +1,17 @@
+<%- include('../layout') %>
+
+<h2>All Categories</h2>
+<a href="/categories/new">+ New Category</a>
+
+<ul>
+  <% categories.forEach(cat => { %>
+    <li>
+      <a href="/categories/<%= cat._id %>"><%= cat.name %></a>
+      <form method="POST" action="/categories/<%= cat._id %>/delete" style="display:inline;">
+        <button>Delete</button>
+      </form>
+    </li>
+  <% }) %>
+</ul>
+
+<%- include('../layout-footer') %>

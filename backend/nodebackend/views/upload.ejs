@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Image Upload Demo</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 900px; margin: auto; }
+        .uploader { margin-bottom: 20px; }
+        .thumbs { display: flex; flex-wrap: wrap; gap: 12px; }
+        .thumb { width: 160px; border: 1px solid #ddd; padding: 8px; border-radius: 6px; text-align: center; }
+        .thumb img { max-width: 100%; height: 100px; object-fit: cover; display: block; margin-bottom: 6px; }
+        .btn { padding: 8px 12px; cursor: pointer; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+<h1>Image Upload (AJAX)</h1>
+
+<div class="uploader">
+    <form id="uploadForm">
+        <input type="file" id="imageInput" name="image" accept="image/*" />
+        <button type="submit" class="btn">Upload</button>
+    </form>
+    <div id="status"></div>
+</div>
+
+<h2>Uploaded Images</h2>
+<button id="refreshBtn" class="btn">Refresh List</button>
+<div id="images" class="thumbs"></div>
+
+<script>
+    const BASE = 'http://localhost:4001'; // same origin
+
+    const uploadForm = document.getElementById('uploadForm');
+    const imageInput = document.getElementById('imageInput');
+    const statusDiv = document.getElementById('status');
+    const imagesDiv = document.getElementById('images');
+    const refreshBtn = document.getElementById('refreshBtn');
+
+    uploadForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        statusDiv.textContent = '';
+        const file = imageInput.files[0];
+        if (!file) {
+            statusDiv.textContent = 'Please choose an image file.';
+            statusDiv.className = 'error';
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('image', file);
+
+        try {
+            statusDiv.textContent = 'Uploading...';
+            statusDiv.className = '';
+            const res = await fetch(BASE + '/api/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            const json = await res.json();
+            if (res.ok && json.success) {
+                statusDiv.textContent = 'Upload successful';
+                statusDiv.className = 'success';
+                imageInput.value = '';
+                await loadImages(); // refresh list
+            } else {
+                statusDiv.textContent = json.message || 'Upload failed';
+                statusDiv.className = 'error';
+            }
+        } catch (err) {
+            console.error(err);
+            statusDiv.textContent = 'Upload error';
+            statusDiv.className = 'error';
+        }
+    });
+
+    async function loadImages() {
+        imagesDiv.innerHTML = 'Loading...';
+        try {
+            const res = await fetch(BASE + '/api/images');
+            const json = await res.json();
+            if (!res.ok || !json.success) {
+                imagesDiv.innerHTML = 'Could not load images';
+                return;
+            }
+
+            const list = json.data;
+            if (list.length === 0) {
+                imagesDiv.innerHTML = '<em>No uploaded images yet.</em>';
+                return;
+            }
+
+            imagesDiv.innerHTML = '';
+            list.forEach((img) => {
+                const el = document.createElement('div');
+                el.className = 'thumb';
+                el.innerHTML = `
+            <img src="${img.url}" alt="${img.filename}" />
+            <div style="font-size:12px;word-break:break-all">${img.filename}</div>
+            <div style="margin-top:6px;"><a href="${img.url}" target="_blank">Open</a></div>
+          `;
+                imagesDiv.appendChild(el);
+            });
+        } catch (err) {
+            console.error(err);
+            imagesDiv.innerHTML = 'Load error';
+        }
+    }
+
+    refreshBtn.addEventListener('click', loadImages);
+
+    // initial load
+    loadImages();
+</script>
+</body>
+</html>

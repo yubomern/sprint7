@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Company CRUD with Modal</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+  <style>
+    body {
+      background: #f0f2f5;
+      padding: 30px;
+    }
+    .container {
+      max-width: 800px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+    #companyList li {
+      background: #f8f9fa;
+      margin-bottom: 10px;
+      padding: 15px;
+      border-radius: 6px;
+    }
+    .search-box {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2 class="text-center mb-4">Company Manager</h2>
+
+  <!-- Search -->
+  <input type="text" id="searchBox" class="form-control search-box" placeholder="Search by name, motive, location...">
+
+  <!-- Button trigger modal -->
+  <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#companyModal" onclick="resetForm()">+ Add Company</button>
+
+  <!-- Company List -->
+  <ul id="companyList" class="list-group"></ul>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="companyModal" tabindex="-1" role="dialog" aria-labelledby="companyModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <form id="companyForm" class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Company Form</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="companyId" />
+        <input type="text" id="name" class="form-control mb-2" placeholder="Company Name" required />
+        <input type="email" id="email" class="form-control mb-2" placeholder="Email" />
+        <input type="text" id="phoneNo" class="form-control mb-2" placeholder="Phone Number" />
+        <input type="text" id="motive" class="form-control mb-2" placeholder="Motive" />
+        <input type="text" id="location" class="form-control mb-2" placeholder="Location" />
+        <input type="text" id="details" class="form-control mb-2" placeholder="Details" />
+        <input type="text" id="patente" class="form-control mb-2" placeholder="Objectif" />
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-success">Save</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="resetForm()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+  let allCompanies = [];
+
+  function fetchCompanies() {
+    $.get('/api/companies', function (data) {
+      allCompanies = data;
+      renderCompanies(data);
+    });
+  }
+
+  function renderCompanies(companies) {
+    $('#companyList').empty();
+    if (companies.length === 0) {
+      $('#companyList').append('<li class="list-group-item">No companies found.</li>');
+      return;
+    }
+
+    companies.forEach(company => {
+      $('#companyList').append(`
+        <li class="list-group-item">
+          <strong>${company.name}</strong> (${company.email || 'No email'})<br/>
+          Phone: ${company.phoneNo || '-'} | Motive: ${company.motive || '-'} | Location: ${company.location || '-'}
+          <br/>
+          <small>${company.details || ''}</small><br/>
+          <button class="btn btn-sm btn-info mt-2" onclick="editCompany('${company._id}')">Edit</button>
+          <button class="btn btn-sm btn-danger mt-2" onclick="deleteCompany('${company._id}')">Delete</button>
+        </li>
+      `);
+    });
+  }
+
+  $('#companyForm').submit(function (e) {
+    e.preventDefault();
+    const data = {
+      name: $('#name').val(),
+      email: $('#email').val(),
+      phoneNo: $('#phoneNo').val(),
+      motive: $('#motive').val(),
+      location: $('#location').val(),
+      details: $('#details').val(),
+      patente: $('#patente').val(),
+    };
+    const id = $('#companyId').val();
+
+    if (id) {
+      $.ajax({
+        url: `/api/companies/${id}`,
+        method: 'PUT',
+        data: data,
+        success: () => {
+          $('#companyModal').modal('hide');
+          fetchCompanies();
+          resetForm();
+        }
+      });
+    } else {
+      $.post('/api/companies', data, () => {
+        $('#companyModal').modal('hide');
+        fetchCompanies();
+        resetForm();
+      });
+    }
+  });
+
+  function editCompany(id) {
+    $.get(`/api/companies/${id}`, function (company) {
+      $('#companyId').val(company._id);
+      $('#name').val(company.name);
+      $('#email').val(company.email);
+      $('#phoneNo').val(company.phoneNo);
+      $('#motive').val(company.motive);
+      $('#location').val(company.location);
+      $('#details').val(company.details);
+      $('#patente').val(company.patente);
+      $('#companyModal').modal('show');
+    });
+  }
+
+  function deleteCompany(id) {
+    if (confirm('Delete this company?')) {
+      $.ajax({
+        url: `/api/companies/${id}`,
+        method: 'DELETE',
+        success: () => fetchCompanies()
+      });
+    }
+  }
+
+  function resetForm() {
+    $('#companyForm')[0].reset();
+    $('#companyId').val('');
+  }
+
+  // Live search filter
+  $('#searchBox').on('keyup', function () {
+    const search = $(this).val().toLowerCase();
+    const filtered = allCompanies.filter(c =>
+      c.name.toLowerCase().includes(search) ||
+      (c.motive || '').toLowerCase().includes(search) ||
+      (c.location || '').toLowerCase().includes(search)
+    );
+    renderCompanies(filtered);
+  });
+
+  fetchCompanies();
+</script>
+</body>
+</html>

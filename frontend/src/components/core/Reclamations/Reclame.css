@@ -1,0 +1,23 @@
+/* Reclam.css */
+
+
+
+input,
+textarea {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  outline: none;
+}
+
+input:focus,
+textarea:focus {
+  border-color: #1a73e8;
+  box-shadow: 0 0 5px rgba(26, 115, 232, 0.3);
+}
+
+
+
+
+

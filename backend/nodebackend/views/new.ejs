@@ -1,0 +1,15 @@
+<h1>New User</h1>
+<form method="POST" action="/users">
+  <input name="username" placeholder="Username" required />
+  <input name="firstName" placeholder="First Name" required />
+  <input name="lastName" placeholder="Last Name" required />
+  <input name="email" placeholder="Email" required />
+  <input name="password" placeholder="Password" type="password" required />
+  <select name="company">
+    <option value="">Select Company</option>
+    <% companies.forEach(c => { %>
+      <option value="<%= c._id %>"><%= c.name %></option>
+    <% }) %>
+  </select>
+  <button type="submit">Save</button>
+</form>

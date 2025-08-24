@@ -1,0 +1,142 @@
+message:  | tmsg: read file | error: no error
+message:  | tmsg: read file | error: no error
+message:  | tmsg: read file | error: no error
+message:  | tmsg: read file | error: no error
+message:  | tmsg: read file | error: no error
+message: class App  { | tmsg: read file | error: no error
+message:  | tmsg: read file | error: no error
+message:  | tmsg: read file | error: no error
+message:       private String host   ; | tmsg: read file | error: no error
+message:       private String userName   ;  | tmsg: read file | error: no error
+message:       private String email ;  | tmsg: read file | error: no error
+message:       private String phoneNumber   ; | tmsg: read file | error: no error
+message:  | tmsg: read file | error: no error
+message:  | tmsg: read file | error: no error
+message:       public App (){ | tmsg: read file | error: no error
+message:  | tmsg: read file | error: no error
+message:       } | tmsg: read file | error: no error
+message:  | tmsg: read file | error: no error
+message:  | tmsg: read file | error: no error
+message:       public static  void main(String []args) { | tmsg: read file | error: no error
+message:         System.out.println("hello   world"); | tmsg: read file | error: no error
+message:       } | tmsg: read file | error: no error
+message:  | tmsg: read file | error: no error
+message: } | tmsg: read file | error: no error
+message: line read: 
+ | file size = 312 | pos = 2 | tmsg: reading file | error: file position 2
+message: line read: 
+ | file size = 312 | pos = 4 | tmsg: reading file | error: file position 4
+message: line read: 
+ | file size = 312 | pos = 6 | tmsg: reading file | error: file position 6
+message: line read: 
+ | file size = 312 | pos = 8 | tmsg: reading file | error: file position 8
+message: line read: 
+ | file size = 312 | pos = 10 | tmsg: reading file | error: file position 10
+message: line read: class App  {
+ | file size = 312 | pos = 24 | tmsg: reading file | error: file position 24
+message: line read: 
+ | file size = 312 | pos = 26 | tmsg: reading file | error: file position 26
+message: line read: 
+ | file size = 312 | pos = 28 | tmsg: reading file | error: file position 28
+message: line read:       private String host   ;
+ | file size = 312 | pos = 59 | tmsg: reading file | error: file position 59
+message: line read:       private String userName   ; 
+ | file size = 312 | pos = 95 | tmsg: reading file | error: file position 95
+message: line read:       private String email ; 
+ | file size = 312 | pos = 126 | tmsg: reading file | error: file position 126
+message: line read:       private String phoneNumber   ;
+ | file size = 312 | pos = 164 | tmsg: reading file | error: file position 164
+message: line read: 
+ | file size = 312 | pos = 166 | tmsg: reading file | error: file position 166
+message: line read: 
+ | file size = 312 | pos = 168 | tmsg: reading file | error: file position 168
+message: line read:       public App (){
+ | file size = 312 | pos = 190 | tmsg: reading file | error: file position 190
+message: line read: 
+ | file size = 312 | pos = 192 | tmsg: reading file | error: file position 192
+message: line read:       }
+ | file size = 312 | pos = 201 | tmsg: reading file | error: file position 201
+message: line read: 
+ | file size = 312 | pos = 203 | tmsg: reading file | error: file position 203
+message: line read: 
+ | file size = 312 | pos = 205 | tmsg: reading file | error: file position 205
+message: line read:       public static  void main(String []args) {
+ | file size = 312 | pos = 254 | tmsg: reading file | error: file position 254
+message: line read:         System.out.println("hello   world");
+ | file size = 312 | pos = 300 | tmsg: reading file | error: file position 300
+message: line read:       }
+ | file size = 312 | pos = 309 | tmsg: reading file | error: file position 309
+message: line read: 
+ | file size = 312 | pos = 311 | tmsg: reading file | error: file position 311
+message: line read: } | file size = 312 | pos = 312 | tmsg: reading file | error: file position 312
+message:  | tmsg: read file | error: no error
+message:  | tmsg: read file | error: no error
+message:  | tmsg: read file | error: no error
+message:  | tmsg: read file | error: no error
+message:  | tmsg: read file | error: no error
+message: class App  { | tmsg: read file | error: no error
+message:  | tmsg: read file | error: no error
+message:  | tmsg: read file | error: no error
+message:       private String host   ; | tmsg: read file | error: no error
+message:       private String userName   ;  | tmsg: read file | error: no error
+message:       private String email ;  | tmsg: read file | error: no error
+message:       private String phoneNumber   ; | tmsg: read file | error: no error
+message:  | tmsg: read file | error: no error
+message:  | tmsg: read file | error: no error
+message:       public App (){ | tmsg: read file | error: no error
+message:  | tmsg: read file | error: no error
+message:       } | tmsg: read file | error: no error
+message:  | tmsg: read file | error: no error
+message:  | tmsg: read file | error: no error
+message:       public static  void main(String []args) { | tmsg: read file | error: no error
+message:         System.out.println("hello   world"); | tmsg: read file | error: no error
+message:       } | tmsg: read file | error: no error
+message:  | tmsg: read file | error: no error
+message: } | tmsg: read file | error: no error
+message: line read: 
+ | file size = 312 | pos = 2 | tmsg: reading file | error: file position 2
+message: line read: 
+ | file size = 312 | pos = 4 | tmsg: reading file | error: file position 4
+message: line read: 
+ | file size = 312 | pos = 6 | tmsg: reading file | error: file position 6
+message: line read: 
+ | file size = 312 | pos = 8 | tmsg: reading file | error: file position 8
+message: line read: 
+ | file size = 312 | pos = 10 | tmsg: reading file | error: file position 10
+message: line read: class App  {
+ | file size = 312 | pos = 24 | tmsg: reading file | error: file position 24
+message: line read: 
+ | file size = 312 | pos = 26 | tmsg: reading file | error: file position 26
+message: line read: 
+ | file size = 312 | pos = 28 | tmsg: reading file | error: file position 28
+message: line read:       private String host   ;
+ | file size = 312 | pos = 59 | tmsg: reading file | error: file position 59
+message: line read:       private String userName   ; 
+ | file size = 312 | pos = 95 | tmsg: reading file | error: file position 95
+message: line read:       private String email ; 
+ | file size = 312 | pos = 126 | tmsg: reading file | error: file position 126
+message: line read:       private String phoneNumber   ;
+ | file size = 312 | pos = 164 | tmsg: reading file | error: file position 164
+message: line read: 
+ | file size = 312 | pos = 166 | tmsg: reading file | error: file position 166
+message: line read: 
+ | file size = 312 | pos = 168 | tmsg: reading file | error: file position 168
+message: line read:       public App (){
+ | file size = 312 | pos = 190 | tmsg: reading file | error: file position 190
+message: line read: 
+ | file size = 312 | pos = 192 | tmsg: reading file | error: file position 192
+message: line read:       }
+ | file size = 312 | pos = 201 | tmsg: reading file | error: file position 201
+message: line read: 
+ | file size = 312 | pos = 203 | tmsg: reading file | error: file position 203
+message: line read: 
+ | file size = 312 | pos = 205 | tmsg: reading file | error: file position 205
+message: line read:       public static  void main(String []args) {
+ | file size = 312 | pos = 254 | tmsg: reading file | error: file position 254
+message: line read:         System.out.println("hello   world");
+ | file size = 312 | pos = 300 | tmsg: reading file | error: file position 300
+message: line read:       }
+ | file size = 312 | pos = 309 | tmsg: reading file | error: file position 309
+message: line read: 
+ | file size = 312 | pos = 311 | tmsg: reading file | error: file position 311
+message: line read: } | file size = 312 | pos = 312 | tmsg: reading file | error: file position 312

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Smart Professor Chat</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f3f4f6; /* light gray */
+            margin: 0;
+            padding: 20px;
+        }
+        #chat-container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgb(0 0 0 / 0.1);
+            display: flex;
+            flex-direction: column;
+            height: 500px;
+        }
+        #chat-header {
+            background: #2563eb;
+            color: white;
+            padding: 16px;
+            font-size: 1.2rem;
+            border-radius: 12px 12px 0 0;
+            text-align: center;
+        }
+        #chat-messages {
+            flex-grow: 1;
+            padding: 16px;
+            overflow-y: auto;
+        }
+        .message {
+            margin-bottom: 12px;
+            max-width: 75%;
+            padding: 10px 14px;
+            border-radius: 18px;
+            line-height: 1.4;
+            font-size: 0.95rem;
+        }
+        .student-msg {
+            background: #e0f2fe;
+            color: #0369a1;
+            align-self: flex-end;
+            border-bottom-right-radius: 0;
+        }
+        .professor-msg {
+            background: #dbeafe;
+            color: #1e40af;
+            align-self: flex-start;
+            border-bottom-left-radius: 0;
+        }
+        #chat-input-area {
+            display: flex;
+            padding: 10px 16px;
+            border-top: 1px solid #e5e7eb;
+        }
+        #chat-input {
+            flex-grow: 1;
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid #cbd5e1;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+        #chat-input:focus {
+            border-color: #2563eb;
+        }
+        #send-btn {
+            background: #2563eb;
+            border: none;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
+            margin-left: 12px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        #send-btn:hover {
+            background: #1e40af;
+        }
+    </style>
+</head>
+<body>
+
+<div id="chat-container">
+    <div id="chat-header">Smart Professor 🤖</div>
+    <div id="chat-messages"></div>
+    <form id="chat-input-area" autocomplete="off">
+        <input type="text" id="chat-input" placeholder="Ask me anything..." required />
+        <button type="submit" id="send-btn">➤</button>
+    </form>
+</div>
+
+<script>
+    const chatMessages = document.getElementById('chat-messages');
+    const chatForm = document.getElementById('chat-input-area');
+    const chatInput = document.getElementById('chat-input');
+
+    // Basic keyword-based professor responses
+    const responses = [
+        {
+            keywords: ['hello', 'hi', 'hey'],
+            reply: "Hello student! How can I assist you with your studies today?"
+        },
+        {
+            keywords: ['homework', 'assignment', 'task'],
+            reply: "Make sure to review your lecture notes carefully. Do you want me to help with a specific question?"
+        },
+        {
+            keywords: ['exam', 'test', 'quiz'],
+            reply: "Exams can be tough! Focus on understanding concepts rather than memorizing."
+        },
+        {
+            keywords: ['javascript', 'js', 'react', 'node'],
+            reply: "JavaScript is powerful! Practice by building small projects to master it."
+        },
+        {
+            keywords: ['css', 'html', 'frontend', 'web'],
+            reply: "Frontend design is all about user experience. Try experimenting with layouts and colors."
+        },
+        {
+            keywords: ['error', 'bug', 'issue'],
+            reply: "Debugging is an essential skill. Read error messages carefully and isolate the problem."
+        },
+        {
+            keywords: ['thanks', 'thank you', 'thx'],
+            reply: "You're welcome! Feel free to ask anytime."
+        },
+    ];
+
+    // Fallback answers for unrecognized questions
+    const fallbackReplies = [
+        "Interesting question! Let me think about that...",
+        "I suggest reviewing the course materials for this topic.",
+        "Could you please clarify your question?",
+        "That's a great question! Let's explore it together.",
+        "I recommend practicing more examples related to that."
+    ];
+
+    // Function to add message to chat window
+    function addMessage(text, sender) {
+        const msgDiv = document.createElement('div');
+        msgDiv.classList.add('message');
+        msgDiv.classList.add(sender === 'student' ? 'student-msg' : 'professor-msg');
+        msgDiv.textContent = text;
+        chatMessages.appendChild(msgDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight; // auto scroll
+    }
+
+    // Function to get professor reply based on user input
+    function getProfessorReply(input) {
+        const lowerInput = input.toLowerCase();
+
+        for (const res of responses) {
+            if (res.keywords.some(keyword => lowerInput.includes(keyword))) {
+                return res.reply;
+            }
+        }
+        // fallback random reply
+        return fallbackReplies[Math.floor(Math.random() * fallbackReplies.length)];
+    }
+
+    chatForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const userInput = chatInput.value.trim();
+        if (!userInput) return;
+
+        // Show student message
+        addMessage(userInput, 'student');
+
+        // Get professor reply after a short delay
+        setTimeout(() => {
+            const reply = getProfessorReply(userInput);
+            addMessage(reply, 'professor');
+        }, 700);
+
+        chatInput.value = '';
+    });
+
+    // Greet when page loads
+    addMessage("Hello! I'm your smart professor bot. Ask me anything about your studies.", 'professor');
+</script>
+
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%-include('./link')-%>
+</head>
+
+<body>
+<%-include('../layout/Header')%>
+<div class="container my-5">
+    <h1 class="text-info text-center">Product List</h1>
+    <a class="btn btn-success" href="/products/new">Add New Product</a>
+    <table class="table align-middle text-center table-striped table-hover table-success my-5 table-bordered">
+        <thead class="table-dark">
+        <tr>
+            <th>S.No</th>
+            <th width="300">Product Name</th>
+            <th width="500">Description</th>
+            <th>Image</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% products.forEach((product,index)=> { %>
+            <tr>
+
+                <td><%= index+1 %></td>
+                <td><%= product.name %></td>
+                <td><%= product.description %></td>
+                <td><img src="/<%= product.singleImage %>" alt="Single Image" width="100px" height="100px"></td>
+                <td>
+                    <a class="btn btn-info" href="/products/<%= product._id %>"><i class="fa-regular fa-eye"></i></a>
+                    <a class="btn btn-warning" href="/products/<%= product._id %>/edit"><i class="fa-solid fa-pencil"></i></a>
+                    <form action="/products/<%= product._id %>?_method=DELETE" method="POST"
+                          style="display:inline;">
+                        <button class="btn btn-danger" type="submit"><i class="fa-solid fa-trash"></i></button>
+                    </form>
+                </td>
+            </tr>
+        <% }) %>
+        </tbody>
+    </table>
+    <ul>
+
+    </ul>
+</div>
+</body>
+
+</html>

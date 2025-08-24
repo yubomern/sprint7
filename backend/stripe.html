@@ -1,0 +1,227 @@
+<html>
+
+<head>
+  <script src="https://js.stripe.com/v3/"></script>
+
+  <style>
+    * {
+        font-family: sans-serif;
+      }
+      
+      body {
+        width: 500px;
+        margin: 0 auto;
+      }
+      
+      #card-element {
+        margin-bottom: 1.5rem;
+      }
+      
+      input[placeholder] {
+        margin: 0.25rem 0 0.8rem;
+        width: 100%;
+        padding: 6px 8px;
+        border-radius: 4px;
+        border: solid 1px rgba(0, 0, 0, 0.6);
+        box-shadow: inset 1px 1px 0 1px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+        box-sizing: border-box;
+      }
+      
+      button {
+        padding: 4px 8px;
+        background: green;
+        color: white;
+        border: 0;
+        border-radius: 0.25rem;
+        font-size: larger;
+      }
+      
+      button:disabled {
+        opacity: 0.3;
+      }
+      
+      textarea {
+        width: 200%;
+        height: 20rem;
+        margin: 1rem -50%;
+        display: block;
+        font-family: monospace;
+      }
+      
+  </style>
+</head>
+
+<body onload="onload()">
+  <form>
+    <h1>1. Enter Stripe PK</h1>
+    Stripe Public Key
+    <input id="stripekey" type="text" placeholder="stripe public key">
+
+    <button onclick="show(event)">Show card field</button>
+  </form>
+  
+  <form id='payment-form' onsubmit="doSubmit(event)">
+    <h1>2. Enter card details + PI secret</h1>
+    <label>
+      <div id="card-element"></div>
+    </label>
+    Name
+    <input id="stripename" type="text" value="Joe Bloggs" placeholder="name">
+    Payment Intent Client Secret
+    <input id="stripeclientsecret" type="text" placeholder="payment intent client secret">
+    <button type="submit" id="submitbutton">Submit Payment</button>
+  </form>
+  
+  <h1>3. Result</h1>
+  <textarea id="output"></textarea>
+
+
+
+<style>
+    .stripecontainer {
+        margin: 10%;
+        border: 1px solid #ddd;
+        background-color: #fff;
+        border-radius: 4px 4px 0 0;
+        padding: 20px;
+      }
+      .bg-danger{
+           margin: -20px;
+        p{
+          padding: 20px;
+        }
+      }
+      .bg-info{
+        padding: 10px;
+        text-align: center;
+      }
+      .center {
+        text-align: center;
+      }
+      
+      fieldset {
+        clear: both;
+        border-bottom: 1px solid lightgrey;
+        margin: 20px -20px;
+        padding: 20px 0;
+      }
+      
+      .disabled {
+        background: lightgrey;
+      }
+      
+      .center {
+        text-align: center;
+      }
+      
+      small {
+        font-size: 0.8em;
+      }
+</style>
+
+  
+  
+ <a href="https://stripe.com/docs/checkout#integration-custom">https://stripe.com/docs/checkout#integration-custom</a>
+  
+
+
+ <div class="stripecontainer">
+   <h3>Payment</h3>
+   <p></p>
+   <hr />
+   
+ 
+ <form action="/charge" method="POST">
+   <script
+     src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+     data-key="pk_test_8OWojWNCqBe85oVEf8ePLiNX"
+     data-amount="999"
+     data-name="peuple caché"
+     data-description="Widget"
+     data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+     data-locale="auto"
+     data-currency="eur">
+   </script>
+ </form>
+ 
+ 
+ </div>
+ <div class="center">CARD NUMMER: 4242424242424242</div>
+
+  <script>
+    function onload() {
+        const stripeKey = localStorage["stripekey"] ?? "";
+        document.querySelector("#stripekey").value = stripeKey;
+      
+        if (stripeKey) {
+          show();
+        }
+      }
+      
+      let stripe;
+      let cardElement;
+      
+      function show(e) {
+        e?.preventDefault();
+      
+        const key = document.querySelector("#stripekey").value;
+        localStorage["stripekey"] = document.querySelector("#stripekey").value;
+        stripe = Stripe(key);
+      
+        const elements = stripe.elements();
+        const style = {
+          base: {
+            color: "#32325d",
+            fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+            fontSmoothing: "antialiased",
+            fontSize: "16px",
+            "::placeholder": {
+              color: "#aab7c4"
+            }
+          },
+          invalid: {
+            color: "#fa755a",
+            iconColor: "#fa755a"
+          }
+        };
+      
+        cardElement = elements.create("card", { style });
+        cardElement.mount("#card-element");
+      }
+      
+      async function doSubmit(e) {
+        e.preventDefault();
+      
+        const name = document.querySelector("#stripename").value;
+        const paymentOption = {
+          payment_method: {
+            card: cardElement,
+            billing_details: { name: name }
+          }
+        };
+        const clientSecret = document.querySelector("#stripeclientsecret").value;
+      
+        try {
+          document.querySelector("#submitbutton").disabled = true;
+          const { paymentIntent, error } = await stripe.confirmCardPayment(
+            clientSecret,
+            paymentOption
+          );
+      
+          if (error) {
+            document.querySelector("#output").value = JSON.stringify(error, null, 2);
+          } else {
+            document.querySelector("#output").value = JSON.stringify(paymentIntent, null, 2);
+          }
+        } catch (e) {
+          alert(e);
+        } finally {
+          document.querySelector("#submitbutton").disabled = false;
+        }
+      }
+      
+  </script>
+</body>
+
+</html>

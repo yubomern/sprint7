@@ -1,0 +1,138 @@
+/* Refund container */
+.refund-container {
+    background: #f9fafb; /* very light gray */
+    border: 1px solid #e5e7eb; /* light border */
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 400px;
+    margin: 20px auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #374151; /* dark gray text */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+  
+  /* Heading */
+  .refund-container h2 {
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #111827; /* almost black */
+  }
+  
+  /* Refund amount input */
+  .refund-container input[type="number"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 1rem;
+    margin-bottom: 15px;
+    background-color: white;
+    transition: border-color 0.2s ease;
+  }
+  
+  .refund-container input[type="number"]:focus {
+    outline: none;
+    border-color: #3b82f6; /* blue focus */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+  }
+  
+  /* Refund button */
+  .refund-container button {
+    background-color: #3b82f6; /* blue */
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .refund-container button:hover {
+    background-color: #2563eb; /* darker blue */
+  }
+  
+  /* Info text */
+  .refund-container .info-text {
+    font-size: 0.875rem;
+    color: #6b7280; /* gray-500 */
+    margin-top: 8px;
+    text-align: center;
+  }
+  
+
+  .refund-container {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 400px;
+    margin: 20px auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #374151;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+  
+  .refund-container h2 {
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #111827;
+  }
+  
+  .input-wrapper {
+    position: relative;
+    margin-bottom: 15px;
+  }
+  
+  .input-wrapper .coin-symbol {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.25rem;
+    color: #6b7280; /* gray */
+    pointer-events: none;
+  }
+  
+  .refund-container input[type="number"] {
+    width: 100%;
+    padding: 10px 12px 10px 36px; /* left padding for symbol */
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 1rem;
+    background-color: white;
+    transition: border-color 0.2s ease;
+  }
+  
+  .refund-container input[type="number"]:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+  }
+  
+  .refund-container button {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .refund-container button:hover {
+    background-color: #2563eb;
+  }
+  
+  .refund-container .info-text {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-top: 8px;
+    text-align: center;
+  }
+  

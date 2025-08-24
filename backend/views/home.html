@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AJAX Category CRUD</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <h2>Category CRUD</h2>
+
+  <form id="categoryForm">
+    <input type="text" id="name" placeholder="Category Name" required />
+    <input type="text" id="description" placeholder="Description" />
+    <input type="hidden" id="categoryId" />
+    <button type="submit">Save</button>
+  </form>
+
+  <ul id="categoryList"></ul>
+
+  <script>
+    function fetchCategories() {
+      $.get('/api/categories', function (data) {
+        $('#categoryList').empty();
+        data.forEach(cat => {
+          $('#categoryList').append(`
+            <li>
+              <b>${cat.name}</b>: ${cat.description}
+              <button onclick="editCategory('${cat._id}', '${cat.name}', '${cat.description}')">Edit</button>
+              <button onclick="deleteCategory('${cat._id}')">Delete</button>
+            </li>
+          `);
+        });
+      });
+    }
+
+    function editCategory(id, name, desc) {
+      $('#categoryId').val(id);
+      $('#name').val(name);
+      $('#description').val(desc);
+    }
+
+    function deleteCategory(id) {
+      if (confirm('Delete this category?')) {
+        $.ajax({
+          url: '/api/categories/' + id,
+          type: 'DELETE',
+          success: fetchCategories
+        });
+      }
+    }
+
+    $('#categoryForm').on('submit', function (e) {
+      e.preventDefault();
+      const data = {
+        name: $('#name').val(),
+        description: $('#description').val()
+      };
+      const id = $('#categoryId').val();
+
+      if (id) {
+        $.ajax({
+          url: '/api/categories/' + id,
+          type: 'PUT',
+          data: data,
+          success: () => {
+            resetForm();
+            fetchCategories();
+          }
+        });
+      } else {
+        $.post('/api/categories', data, function () {
+          resetForm();
+          fetchCategories();
+        });
+      }
+    });
+
+    function resetForm() {
+      $('#name').val('');
+      $('#description').val('');
+      $('#categoryId').val('');
+    }
+
+    fetchCategories();
+  </script>
+</body>
+</html>
