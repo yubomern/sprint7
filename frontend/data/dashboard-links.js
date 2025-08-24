@@ -195,6 +195,20 @@ export const sidebarLinks = [
     type: ACCOUNT_TYPE.INSTRUCTOR,
     icon: "VscMortarBoard",
   },
+   {
+    id: 26,
+    name: "instructorprofile",
+    path: "/dashboard/profileinstructor",
+    type: ACCOUNT_TYPE.INSTRUCTOR,
+    icon: "VscMortarBoard",
+  },
+   {
+    id: 27,
+    name: "studentprofile",
+    path: "/dashboard/profilestudent",
+    type: ACCOUNT_TYPE.STUDENT,
+    icon: "VscMortarBoard",
+  },
 
    //dashboard/reclamation
 

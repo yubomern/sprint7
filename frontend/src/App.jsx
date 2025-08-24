@@ -61,6 +61,7 @@ import ChatApp from "./components/core/Chat/ChatApp.jsx";
 import TeacherPosts from "./components/core/Dashboard/Teacher/TeacherPost.jsx";
 import TeacherDashboard from "./components/core/Dashboard/Teacher/TeacherDashboard.jsx";
 import ReclamationStudent from "./components/core/Reclamations/ReclamationStudent.jsx";
+import ProfileDetail from "./components/core/ProfileDetail/ProfileDetail.jsx";
 
 
 
@@ -184,7 +185,8 @@ function App() {
            <Route path="dashboard/reclamation" element={<ReclamationStudent />} />
 
 
-          
+           <Route path="dashboard/profileinstructor" element={<ProfileDetail />} />
+            <Route path="dashboard/profilestudent" element={<ProfileDetail />} />
 
 
           <Route path="dashboard/ocr" element={<UploadPdfOcr />} />

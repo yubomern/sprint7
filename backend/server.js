@@ -202,6 +202,11 @@ app.use('/push', push);
 
 const ratingRoutes = require('./routes/ratingRoutes');
 
+const userdetail =require('./routes/userDetailRoutes');
+
+
+app.use('/api/detail' ,   userdetail);
+
 app.use('/api/ratings', ratingRoutes);
 
 app.use('/api/reclam' , require('./routes/reclamationStudentRoutes'));
