@@ -1,0 +1,33 @@
+  // utils/checkToken.js
+export async function checkToken() {
+  try {
+    const token = localStorage.getItem("token"); // Or from Redux/Context
+    if (!token) {
+      throw new Error("No token found");
+    }
+
+    const res = await fetch("http://localhost:4000/api/check", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      if (data.expired) {
+        // Auto logout
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+      }
+      throw new Error(data.message || "Unauthorized");
+    }
+
+    const data = await res.json();
+    console.log("✅ Token check success:", data);
+    return data;
+  } catch (err) {
+    console.error("❌ Token check failed:", err.message);
+    return null;
+  }
+  }

@@ -211,5 +211,22 @@ export const sidebarLinks = [
   },
 
    //dashboard/reclamation
+   //dashboard/notif
+
+     {
+    id: 28,
+    name: "notif",
+    path: "/dashboard/notif",
+    type: ACCOUNT_TYPE.STUDENT,
+    icon: "VscMortarBoard",
+  },
+
+  {
+    id: 29,
+    name: "notifprof",
+    path: "/dashboard/notif",
+    type: ACCOUNT_TYPE.INSTRUCTOR,
+    icon: "VscMortarBoard",
+  },
 
 ];

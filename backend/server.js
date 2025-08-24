@@ -67,6 +67,7 @@ const server = require("http").createServer(app);
 const io = require("socket.io")(server, {
     cors: {
       origin: "*", //specific origin you want to give access to,
+      credentials: true,
     },
   });
   
@@ -201,9 +202,11 @@ app.use('/push', push);
 
 
 const ratingRoutes = require('./routes/ratingRoutes');
-
+const { Worker } = require('worker_threads');
 const userdetail =require('./routes/userDetailRoutes');
+const  checkuser  = require("./routes/checktokenRoutes");
 
+app.use('/api/check'  ,  checkuser);
 
 app.use('/api/detail' ,   userdetail);
 
@@ -274,6 +277,61 @@ io.on('connection', (socket) => {
   // optional debugging
   socket.on('disconnect', () => console.log('socket disconnected', socket.id));
 });
+
+
+
+
+const userSockets = new Map();
+
+// Authenticate user on connection (VERY basic demo)
+io.on('connection-user', (socket) => {
+  // You can pass userId via auth or query: io("url",{auth:{userId}})
+  const userId = socket.handshake.auth?.userId || socket.handshake.query?.userId;
+  if (userId) {
+    userSockets.set(userId, socket.id);
+    socket.join(`user:${userId}`);
+    // Notify the client it's connected
+    io.to(socket.id).emit('system', { type: 'connected', userId });
+  }
+
+  socket.on('disconnect-user', () => {
+    if (userId) userSockets.delete(userId);
+  });
+});
+
+// --- Worker
+const worker = new Worker(path.join(__dirname, 'notificationWorker.js'));
+
+// From worker -> to user socket
+worker.on('message', (msg) => {
+  if (msg?.ok && msg.userId && msg.event) {
+    // Emit to that specific user room
+    io.to(`user:${msg.userId}`).emit('notification', msg.event);
+  }
+});
+
+worker.on('error', (err) => console.error('Worker error:', err));
+
+// --- REST route to queue notifications
+let jobCounter = 1;
+
+/**
+ * POST /api/notify
+ * body: { userId: string, payload: { title, body, kind?, meta? } }
+ */
+app.post('/api/notify', (req, res) => {
+  const { userId, payload } = req.body || {};
+  if (!userId || !payload) {
+    return res.status(400).json({ ok: false, error: 'userId and payload are required' });
+  }
+  const jobId = `job-${jobCounter++}`;
+  worker.postMessage({ type: 'NOTIFY', jobId, userId, payload });
+  res.json({ ok: true, queued: true, jobId });
+});
+
+// Health check
+app.get('/api/health', (_req, res) => res.json({ ok: true }));
+
 
 server.listen(PORT, () => {
     console.log ("server chat  ");

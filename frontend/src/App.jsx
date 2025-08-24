@@ -62,12 +62,14 @@ import TeacherPosts from "./components/core/Dashboard/Teacher/TeacherPost.jsx";
 import TeacherDashboard from "./components/core/Dashboard/Teacher/TeacherDashboard.jsx";
 import ReclamationStudent from "./components/core/Reclamations/ReclamationStudent.jsx";
 import ProfileDetail from "./components/core/ProfileDetail/ProfileDetail.jsx";
-
+import { checkToken } from "./utils/checkToken";
+import Notification from "./components/core/Notification/Notification.jsx";
 
 
 function App() {
 
   const { user } = useSelector((state) => state.profile)
+
 
   // Scroll to the top of the page when the component mounts
   const location = useLocation();
@@ -81,8 +83,23 @@ function App() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [])
-
+  }, []) ;
+     useEffect(() => {
+    const verify = async () => {
+      const isValid = await checkToken();
+      console.log("Token valid?", isValid);
+    };
+   const timer  =  setTimeout(() => {
+      verify();
+      
+    }, 5000); 
+    return () => clearTimeout(timer);
+  }, []);
+  
+    useEffect(() => {
+    //checkToken();
+    console.log(new Date());
+   }, []);
 
   // Go upward arrow - show , unshow
   const [showArrow, setShowArrow] = useState(false)
@@ -214,6 +231,8 @@ function App() {
 
 
           <Route path="dashboard/jetsi" element={<StudentCalendar />} />
+
+         <Route path="dashboard/notif" element={<Notification />} />
 
 
 
